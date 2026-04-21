@@ -1,0 +1,5 @@
+2026-04-21 06:13:00.013639 | Boston Celtics | Score: 112 | Threshold: 110 | Result: YES
+2026-04-21 06:13:00.013895 | Brooklyn Nets | Score: TBD | Threshold: 105 | Result: ERROR - Needs manual review
+2026-04-21 06:13:00.013981 | Chicago Bulls | Score: 108 | Threshold: 108 | Result: PUSH
+2026-04-21 06:13:00.014051 | Atlanta Hawks | Score: 99 | Threshold: 100 | Result: NO
+2026-04-21 06:13:00.014118 | Charlotte Hornets | Score: 101 | Threshold: 95 | Result: YES
