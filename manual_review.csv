@@ -1,2 +1,2 @@
-team,score,threshold,result,sport
-Brooklyn Nets,TBD,105,ERROR - Needs manual review,NBA
+team,stadium,location,score,threshold,result,sport
+Brooklyn Nets,Barclays Center,"Brooklyn, New York",TBD,105,ERROR - Needs manual review,NBA
