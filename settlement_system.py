@@ -2,10 +2,10 @@
 # Automated Sports Market Settlement System
 # Author: Mattingly Siegel
 # Description: Demonstrates an automated settlement workflow.
-# Connects to TheSportsDB API for live team data, applies
-# settlement logic against predefined contract thresholds,
-# logs all decisions for CFTC compliance, and flags
-# incomplete contracts for manual review.
+# Connects to TheSportsDB API for live NBA team data, matches
+# teams against predefined contract thresholds, settles each
+# contract as YES/NO/PUSH, logs all decisions for CFTC 
+# compliance, and flags incomplete contracts for manual review.
 # Note: Game scores are simulated for demonstration purposes.
 # In production, scores would be pulled from a live data feed.
 # ============================================================
@@ -29,9 +29,8 @@ contracts = {
 
 # ============================================================
 # SECTION 2: GAME RESULTS
-# Actual game results for settlement.
-# In production, these would be pulled automatically
-# from a live sports data API.
+# Simulated game results for demonstration purposes.
+# In production, these would come from a live data feed.
 # ============================================================
 game_results = {
     "Boston Celtics": 112,
@@ -62,7 +61,7 @@ def settle_contract(team, score, threshold):
 
     except ValueError:
         # Handles missing or invalid score data gracefully
-        # without crashing the entire settlement run
+        # flags the contract for review without crashing the settlement run
         result = "ERROR - Needs manual review"
 
     # Build formatted log entry using f-string
@@ -78,13 +77,32 @@ def settle_contract(team, score, threshold):
     return result
 
 # ============================================================
-# SECTION 4: MAIN SETTLEMENT LOOP
-# Loops through all contracts, matches game results,
-# and runs each through the settlement engine.
+# SECTION 4: API CALL
+# Pulls live NBA team data from TheSportsDB API.
+# Used to validate team names against a real data source.
+# ============================================================
+def get_nba_teams():
+    try:
+        response = requests.get(
+            "https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=NBA"
+        )
+        data = response.json()
+        return [team["strTeam"] for team in data["teams"]]
+    except Exception:
+        print("WARNING: Could not reach API. Proceeding with local data.")
+        return []
+
+# ============================================================
+# SECTION 5: MAIN SETTLEMENT LOOP
+# Pulls live team data from API, loops through all contracts,
+# matches game results, and runs each through the settlement engine.
 # ============================================================
 print("--- SETTLEMENT SYSTEM STARTING ---")
 print(f"Time: {datetime.datetime.now()}")
 print("----------------------------------")
+
+# Pull live NBA teams from API
+nba_teams = get_nba_teams()
 
 results = []
 
@@ -92,7 +110,11 @@ for team, contract in contracts.items():
     threshold = contract["threshold"]
     sport = contract["sport"]
 
-    # Check if a score exists for this team, default to TBD
+    # Validate team exists in live API data
+    if nba_teams and team not in nba_teams:
+        print(f"WARNING: {team} not found in live API data")
+
+    # Get score from game results
     if team in game_results:
         score = game_results[team]
     else:
@@ -112,7 +134,7 @@ print("----------------------------------")
 print("--- SETTLEMENT COMPLETE ---")
 
 # ============================================================
-# SECTION 5: PANDAS ANALYSIS & REPORTING
+# SECTION 6: PANDAS ANALYSIS & REPORTING
 # Analyzes settlement results, generates summary,
 # and exports any flagged contracts to a CSV
 # for supervisor review.
@@ -122,7 +144,7 @@ df = pd.DataFrame(results)
 print("\n--- RESULT SUMMARY ---")
 print(df["result"].value_counts())
 
-# Filter contracts that need manual review
+# Filter flagged contracts that need manual review
 errors = df[df["result"] == "ERROR - Needs manual review"]
 
 if len(errors) > 0:
