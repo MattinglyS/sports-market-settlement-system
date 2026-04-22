@@ -46,7 +46,7 @@ game_results = {
 # returns YES/NO/PUSH, logs every decision with timestamp
 # for CFTC compliance and audit trail purposes.
 # ============================================================
-def settle_contract(team, score, threshold):
+def settle_contract(team, score, threshold, stadium, location):
     timestamp = datetime.datetime.now()
 
     try:
@@ -65,7 +65,7 @@ def settle_contract(team, score, threshold):
         result = "ERROR - Needs manual review"
 
     # Build formatted log entry using f-string
-    log_entry = f"{timestamp} | {team} | Score: {score} | Threshold: {threshold} | Result: {result}"
+    log_entry = f"{timestamp} | {team} | {stadium} | {location} | Score: {score} | Threshold: {threshold} | Result: {result}"
 
     # Print to console for real-time monitoring
     print(log_entry)
@@ -79,7 +79,7 @@ def settle_contract(team, score, threshold):
 # ============================================================
 # SECTION 4: API CALL
 # Pulls live NBA team data from TheSportsDB API.
-# Used to validate team names against a real data source.
+# Returns a dictionary of team info for use in settlement output.
 # ============================================================
 def get_nba_teams():
     try:
@@ -87,10 +87,16 @@ def get_nba_teams():
             "https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=NBA"
         )
         data = response.json()
-        return [team["strTeam"] for team in data["teams"]]
+        teams = {}
+        for team in data["teams"]:
+            teams[team["strTeam"]] = {
+                "stadium": team["strStadium"],
+                "location": team["strLocation"]
+            }
+        return teams
     except Exception:
         print("WARNING: Could not reach API. Proceeding with local data.")
-        return []
+        return {}
 
 # ============================================================
 # SECTION 5: MAIN SETTLEMENT LOOP
@@ -110,8 +116,13 @@ for team, contract in contracts.items():
     threshold = contract["threshold"]
     sport = contract["sport"]
 
-    # Validate team exists in live API data
-    if nba_teams and team not in nba_teams:
+    # Pull stadium and location from live API data
+    if nba_teams and team in nba_teams:
+        stadium = nba_teams[team]["stadium"]
+        location = nba_teams[team]["location"]
+    else:
+        stadium = "Unknown"
+        location = "Unknown"
         print(f"WARNING: {team} not found in live API data")
 
     # Get score from game results
@@ -121,9 +132,11 @@ for team, contract in contracts.items():
         score = "TBD"
 
     # Run settlement and collect result
-    result = settle_contract(team, score, threshold)
+    result = settle_contract(team, score, threshold, stadium, location)
     results.append({
         "team": team,
+        "stadium": stadium,
+        "location": location,
         "score": score,
         "threshold": threshold,
         "result": result,
