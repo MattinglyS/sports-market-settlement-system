@@ -1,5 +1,5 @@
-2026-04-21 06:13:00.013639 | Boston Celtics | Score: 112 | Threshold: 110 | Result: YES
-2026-04-21 06:13:00.013895 | Brooklyn Nets | Score: TBD | Threshold: 105 | Result: ERROR - Needs manual review
-2026-04-21 06:13:00.013981 | Chicago Bulls | Score: 108 | Threshold: 108 | Result: PUSH
-2026-04-21 06:13:00.014051 | Atlanta Hawks | Score: 99 | Threshold: 100 | Result: NO
-2026-04-21 06:13:00.014118 | Charlotte Hornets | Score: 101 | Threshold: 95 | Result: YES
+2026-04-22 00:42:43.494227 | Boston Celtics | TD Garden | Boston, Massachusetts | Score: 112 | Threshold: 110 | Result: YES
+2026-04-22 00:42:43.494399 | Brooklyn Nets | Barclays Center | Brooklyn, New York | Score: TBD | Threshold: 105 | Result: ERROR - Needs manual review
+2026-04-22 00:42:43.494466 | Chicago Bulls | United Center | Chicago, Illinois | Score: 108 | Threshold: 108 | Result: PUSH
+2026-04-22 00:42:43.494518 | Atlanta Hawks | State Farm Arena | Atlanta, Georgia | Score: 99 | Threshold: 100 | Result: NO
+2026-04-22 00:42:43.494566 | Charlotte Hornets | Spectrum Center | Charlotte, North Carolina | Score: 101 | Threshold: 95 | Result: YES
