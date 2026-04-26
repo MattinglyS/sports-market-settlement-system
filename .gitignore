@@ -1,0 +1,6 @@
+settlement.db
+capstone_log.txt
+manual_review.csv
+contracts.csv
+*.pyc
+__pycache__/
