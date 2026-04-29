@@ -1,5 +1,10 @@
 # NBA Settlement System
 ### Author: Mattingly Siegel
+## Live Dashboard Preview
+
+![NBA Settlement System Dashboard](dashboard_preview.png)
+
+> Run `python generate_dashboard.py` to generate a live updated version locally.
 
 A live automated settlement system that pulls real data from three APIs 
 to track, grade, and report NBA prediction market contracts in real time.
