@@ -19,6 +19,8 @@ import pytz
 from nba_api.stats.endpoints import scoreboardv3
 from db import init_db, store_contracts, load_todays_contracts, has_todays_contracts, load_recent_contracts
 
+# Note: In production this would be stored as an environment variable.
+# Free API key included here for ease of demonstration.
 ODDS_API_KEY = "9d8da42a565270cdd585078555d5f310"
 EASTERN = pytz.timezone("America/New_York")
 
