@@ -23,6 +23,8 @@ python settlement_system.py
 ## Files
 - `settlement_system.py` — main settlement engine
 - `db.py` — database module for storing contract lines
+- `generate_dashboard.py` — generates the live HTML dashboard
+- `dashboard.html` — sample dashboard output (click to preview)
 
 ## Background
 Built as preparation for a role in prediction market operations. 
