@@ -7,329 +7,49 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background: #0a0e1a;
-            color: #e2e8f0;
-            font-family: 'IBM Plex Sans', sans-serif;
-            min-height: 100vh;
-            padding: 0;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            border-bottom: 1px solid #1e3a5f;
-            padding: 24px 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .header-left h1 {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 22px;
-            font-weight: 600;
-            color: #f8fafc;
-            letter-spacing: -0.5px;
-        }
-
-        .header-left p {
-            font-size: 13px;
-            color: #64748b;
-            margin-top: 4px;
-            font-family: 'IBM Plex Mono', monospace;
-        }
-
-        .header-right {
-            display: flex;
-            gap: 24px;
-        }
-
-        .stat-pill {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 10px 20px;
-            text-align: center;
-        }
-
-        .stat-pill .number {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 20px;
-            font-weight: 600;
-            color: #38bdf8;
-        }
-
-        .stat-pill .label {
-            font-size: 11px;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 2px;
-        }
-
-        .content {
-            padding: 32px 40px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section {
-            margin-bottom: 40px;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #1e293b;
-        }
-
-        .section-title {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #94a3b8;
-        }
-
-        .section-count {
-            background: #1e293b;
-            color: #64748b;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 16px;
-        }
-
-        .card {
-            background: #0f172a;
-            border: 1px solid #1e293b;
-            border-radius: 12px;
-            padding: 20px;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            border-color: #334155;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-            gap: 12px;
-        }
-
-        .game-name {
-            font-size: 14px;
-            font-weight: 500;
-            color: #f1f5f9;
-            line-height: 1.4;
-        }
-
-        .result-badge {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 6px;
-            border: 1px solid;
-            white-space: nowrap;
-        }
-
-        .status-badge {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 11px;
-            color: #f59e0b;
-            background: rgba(245,158,11,0.1);
-            padding: 4px 10px;
-            border-radius: 6px;
-            white-space: nowrap;
-        }
-
-        .countdown-badge {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 12px;
-            color: #38bdf8;
-            background: rgba(56,189,248,0.1);
-            padding: 4px 10px;
-            border-radius: 6px;
-            white-space: nowrap;
-        }
-
-        .no-line-badge {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 11px;
-            color: #64748b;
-            background: rgba(100,116,139,0.1);
-            padding: 4px 10px;
-            border-radius: 6px;
-        }
-
-        .card-body {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-
-        .stat {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .stat-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #475569;
-        }
-
-        .stat-value {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 14px;
-            font-weight: 500;
-            color: #cbd5e1;
-        }
-
-        .venue {
-            font-size: 11px;
-            color: #475569;
-            border-top: 1px solid #1e293b;
-            padding-top: 10px;
-        }
-
-        .live-card {
-            border-color: #f59e0b;
-            background: rgba(245,158,11,0.03);
-        }
-
-        .upcoming-card {
-            border-color: #1e3a5f;
-        }
-
-        .no-line-card {
-            border-color: #1e293b;
-            opacity: 0.7;
-        }
-
-        .tomorrow-card {
-            border-color: #1e293b;
-            background: #080c16;
-        }
-
-        .live-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 10px;
-            font-weight: 600;
-            color: #f59e0b;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-        }
-
-        .live-dot {
-            width: 6px;
-            height: 6px;
-            background: #f59e0b;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.8); }
-        }
-
-        .history-day {
-            background: #0f172a;
-            border: 1px solid #1e293b;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-
-        .history-date {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 12px;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 14px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #1e293b;
-        }
-
-        .history-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 80px;
-            gap: 12px;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #0f1929;
-        }
-
-        .history-row:last-child {
-            border-bottom: none;
-        }
-
-        .history-game {
-            font-size: 13px;
-            color: #cbd5e1;
-        }
-
-        .history-score {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        .history-line {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        .history-result {
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 12px;
-            font-weight: 600;
-            text-align: right;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 24px;
-            color: #334155;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 11px;
-            border-top: 1px solid #1e293b;
-            margin-top: 40px;
-        }
-
-        .empty-state {
-            color: #334155;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 13px;
-            padding: 20px;
-            text-align: center;
-        }
+        body { background: #0a0e1a; color: #e2e8f0; font-family: 'IBM Plex Sans', sans-serif; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-bottom: 1px solid #1e3a5f; padding: 24px 40px; display: flex; align-items: center; justify-content: space-between; }
+        .header-left h1 { font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600; color: #f8fafc; letter-spacing: -0.5px; }
+        .header-left p { font-size: 13px; color: #64748b; margin-top: 4px; font-family: 'IBM Plex Mono', monospace; }
+        .header-right { display: flex; gap: 24px; }
+        .stat-pill { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 10px 20px; text-align: center; }
+        .stat-pill .number { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 600; color: #38bdf8; }
+        .stat-pill .label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+        .content { padding: 32px 40px; max-width: 1400px; margin: 0 auto; }
+        .section { margin-bottom: 40px; }
+        .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #1e293b; }
+        .section-title { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; }
+        .section-count { background: #1e293b; color: #64748b; font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+        .card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; transition: transform 0.2s, border-color 0.2s; }
+        .card:hover { transform: translateY(-2px); border-color: #334155; }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 12px; }
+        .game-name { font-size: 14px; font-weight: 500; color: #f1f5f9; line-height: 1.4; }
+        .result-badge { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 6px; border: 1px solid; white-space: nowrap; }
+        .status-badge { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 4px 10px; border-radius: 6px; white-space: nowrap; }
+        .countdown-badge { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #38bdf8; background: rgba(56,189,248,0.1); padding: 4px 10px; border-radius: 6px; white-space: nowrap; }
+        .no-line-badge { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #64748b; background: rgba(100,116,139,0.1); padding: 4px 10px; border-radius: 6px; }
+        .card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+        .stat { display: flex; flex-direction: column; gap: 3px; }
+        .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #475569; }
+        .stat-value { font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 500; color: #cbd5e1; }
+        .venue { font-size: 11px; color: #475569; border-top: 1px solid #1e293b; padding-top: 10px; }
+        .live-card { border-color: #f59e0b; background: rgba(245,158,11,0.03); }
+        .upcoming-card { border-color: #1e3a5f; }
+        .no-line-card { border-color: #1e293b; opacity: 0.7; }
+        .tomorrow-card { border-color: #1e293b; background: #080c16; }
+        .live-indicator { display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; color: #f59e0b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+        .live-dot { width: 6px; height: 6px; background: #f59e0b; border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
+        .history-day { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+        .history-date { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #1e293b; }
+        .history-row { display: grid; grid-template-columns: 2fr 1fr 1fr 80px; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #0f1929; }
+        .history-row:last-child { border-bottom: none; }
+        .history-game { font-size: 13px; color: #cbd5e1; }
+        .history-score { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #64748b; }
+        .history-line { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #64748b; }
+        .history-result { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; text-align: right; }
+        .footer { text-align: center; padding: 24px; color: #334155; font-family: 'IBM Plex Mono', monospace; font-size: 11px; border-top: 1px solid #1e293b; margin-top: 40px; }
     </style>
 </head>
 <body>
@@ -337,25 +57,13 @@
 <div class="header">
     <div class="header-left">
         <h1>NBA Settlement System</h1>
-        <p>Generated April 29, 2026 at 02:57 PM ET</p>
+        <p>Generated April 30, 2026 at 12:39 AM ET</p>
     </div>
     <div class="header-right">
-        <div class="stat-pill">
-            <div class="number">0</div>
-            <div class="label">Settled</div>
-        </div>
-        <div class="stat-pill">
-            <div class="number">0</div>
-            <div class="label">Live</div>
-        </div>
-        <div class="stat-pill">
-            <div class="number">3</div>
-            <div class="label">Upcoming</div>
-        </div>
-        <div class="stat-pill">
-            <div class="number">$150,000</div>
-            <div class="label">Volume</div>
-        </div>
+        <div class="stat-pill"><div class="number">0</div><div class="label">Settled</div></div>
+        <div class="stat-pill"><div class="number">0</div><div class="label">Live</div></div>
+        <div class="stat-pill"><div class="number">3</div><div class="label">Upcoming</div></div>
+        <div class="stat-pill"><div class="number">$150,000</div><div class="label">Volume</div></div>
     </div>
 </div>
 
@@ -367,46 +75,43 @@
 
     
     <div class="section">
-        <div class="section-header">
-            <span class="section-title">⏰ Upcoming Contracts</span>
-            <span class="section-count">3</span>
-        </div>
+        <div class="section-header"><span class="section-title">⏰ Upcoming Contracts</span><span class="section-count">3</span></div>
         <div class="cards-grid">
         <div class="card upcoming-card">
             <div class="card-header">
-                <span class="game-name">Orlando Magic @ Detroit Pistons</span>
-                <span class="countdown-badge">4h 2m</span>
+                <span class="game-name">New York Knicks @ Atlanta Hawks</span>
+                <span class="countdown-badge">18h 20m</span>
             </div>
             <div class="card-body">
                 <div class="stat"><span class="stat-label">Tipoff</span><span class="stat-value">07:00 PM ET</span></div>
-                <div class="stat"><span class="stat-label">Line</span><span class="stat-value">211.3</span></div>
+                <div class="stat"><span class="stat-label">Line</span><span class="stat-value">214.0</span></div>
                 <div class="stat"><span class="stat-label">Volume</span><span class="stat-value">$50,000</span></div>
             </div>
-            <div class="venue">Little Caesars Arena — Detroit, Michigan</div>
+            <div class="venue">State Farm Arena — Atlanta, Georgia</div>
         </div>
         <div class="card upcoming-card">
             <div class="card-header">
-                <span class="game-name">Toronto Raptors @ Cleveland Cavaliers</span>
-                <span class="countdown-badge">4h 32m</span>
+                <span class="game-name">Boston Celtics @ Philadelphia 76ers</span>
+                <span class="countdown-badge">19h 20m</span>
             </div>
             <div class="card-body">
-                <div class="stat"><span class="stat-label">Tipoff</span><span class="stat-value">07:30 PM ET</span></div>
-                <div class="stat"><span class="stat-label">Line</span><span class="stat-value">217.7</span></div>
+                <div class="stat"><span class="stat-label">Tipoff</span><span class="stat-value">08:00 PM ET</span></div>
+                <div class="stat"><span class="stat-label">Line</span><span class="stat-value">212.5</span></div>
                 <div class="stat"><span class="stat-label">Volume</span><span class="stat-value">$50,000</span></div>
             </div>
-            <div class="venue">Rocket Arena — Cleveland, Ohio</div>
+            <div class="venue">Xfinity Mobile Arena — Philadelphia, Pennsylvania</div>
         </div>
         <div class="card upcoming-card">
             <div class="card-header">
-                <span class="game-name">Houston Rockets @ Los Angeles Lakers</span>
-                <span class="countdown-badge">7h 2m</span>
+                <span class="game-name">Denver Nuggets @ Minnesota Timberwolves</span>
+                <span class="countdown-badge">20h 50m</span>
             </div>
             <div class="card-body">
-                <div class="stat"><span class="stat-label">Tipoff</span><span class="stat-value">10:00 PM ET</span></div>
-                <div class="stat"><span class="stat-label">Line</span><span class="stat-value">208.5</span></div>
+                <div class="stat"><span class="stat-label">Tipoff</span><span class="stat-value">09:30 PM ET</span></div>
+                <div class="stat"><span class="stat-label">Line</span><span class="stat-value">225.0</span></div>
                 <div class="stat"><span class="stat-label">Volume</span><span class="stat-value">$50,000</span></div>
             </div>
-            <div class="venue">Crypto.com Arena — Los Angeles, California</div>
+            <div class="venue">Target Center — Minneapolis, Minnesota</div>
         </div></div>
     </div>
 
@@ -414,71 +119,45 @@
 
     
     <div class="section">
-        <div class="section-header">
-            <span class="section-title">📅 Tomorrow's Games</span>
-            <span class="section-count">3</span>
-        </div>
+        <div class="section-header"><span class="section-title">📅 Tomorrow's Games</span><span class="section-count">2</span></div>
         <div class="cards-grid">
         <div class="card tomorrow-card">
             <div class="card-header">
-                <span class="game-name">New York Knicks @ Atlanta Hawks</span>
+                <span class="game-name">Detroit Pistons @ Orlando Magic</span>
             </div>
             <div class="card-body">
-                <div class="stat"><span class="stat-label">Tipoff</span><span class="stat-value">07:10 PM ET</span></div>
-                <div class="stat"><span class="stat-label">Line</span><span class="stat-value">213.9</span></div>
+                <div class="stat"><span class="stat-label">Tipoff</span><span class="stat-value">07:00 PM ET</span></div>
+                <div class="stat"><span class="stat-label">Line</span><span class="stat-value">211.0</span></div>
             </div>
         </div>
         <div class="card tomorrow-card">
             <div class="card-header">
-                <span class="game-name">Boston Celtics @ Philadelphia 76ers</span>
+                <span class="game-name">Cleveland Cavaliers @ Toronto Raptors</span>
             </div>
             <div class="card-body">
-                <div class="stat"><span class="stat-label">Tipoff</span><span class="stat-value">08:10 PM ET</span></div>
-                <div class="stat"><span class="stat-label">Line</span><span class="stat-value">212.6</span></div>
-            </div>
-        </div>
-        <div class="card tomorrow-card">
-            <div class="card-header">
-                <span class="game-name">Denver Nuggets @ Minnesota Timberwolves</span>
-            </div>
-            <div class="card-body">
-                <div class="stat"><span class="stat-label">Tipoff</span><span class="stat-value">09:40 PM ET</span></div>
-                <div class="stat"><span class="stat-label">Line</span><span class="stat-value">224.8</span></div>
+                <div class="stat"><span class="stat-label">Tipoff</span><span class="stat-value">08:00 PM ET</span></div>
+                <div class="stat"><span class="stat-label">Line</span><span class="stat-value">220.5</span></div>
             </div>
         </div></div>
     </div>
 
     
     <div class="section">
-        <div class="section-header">
-            <span class="section-title">📜 Recent Settlements</span>
-        </div>
+        <div class="section-header"><span class="section-title">📜 Recent Settlements</span></div>
         
         <div class="history-day">
-            <div class="history-date">April 26, 2026</div>
+            <div class="history-date">April 29, 2026</div>
             
             <div class="history-row">
-                <span class="history-game">Cleveland Cavaliers @ Toronto Raptors</span>
-                <span class="history-score">89-93 (Total: 182)</span>
-                <span class="history-line">Line: 220.5</span>
-                <span class="history-result" style="color:#ef4444">UNDER</span>
-            </div>
-            <div class="history-row">
-                <span class="history-game">San Antonio Spurs @ Portland Trail Blazers</span>
-                <span class="history-score">114-93 (Total: 207)</span>
-                <span class="history-line">Line: 218.6</span>
-                <span class="history-result" style="color:#ef4444">UNDER</span>
-            </div>
-            <div class="history-row">
-                <span class="history-game">Boston Celtics @ Philadelphia 76ers</span>
-                <span class="history-score">128-96 (Total: 224)</span>
-                <span class="history-line">Line: 213.6</span>
+                <span class="history-game">Orlando Magic @ Detroit Pistons</span>
+                <span class="history-score">109-116 (Total: 225)</span>
+                <span class="history-line">Line: 211.5</span>
                 <span class="history-result" style="color:#22c55e">OVER</span>
             </div>
             <div class="history-row">
-                <span class="history-game">Los Angeles Lakers @ Houston Rockets</span>
-                <span class="history-score">96-115 (Total: 211)</span>
-                <span class="history-line">Line: 207.6</span>
+                <span class="history-game">Toronto Raptors @ Cleveland Cavaliers</span>
+                <span class="history-score">120-125 (Total: 245)</span>
+                <span class="history-line">Line: 217.5</span>
                 <span class="history-result" style="color:#22c55e">OVER</span>
             </div>
         </div>
@@ -491,3 +170,4 @@
 </div>
 
 </body>
+</html>
