@@ -51,11 +51,8 @@ def get_all_odds():
                 game['commence_time'].replace('Z', '+00:00')
             )
             game_time_et = game_time_utc.astimezone(EASTERN)
-
-            # Only store today's games
             if game_time_et.date() != today:
                 continue
-
             lines = []
             for bookmaker in game['bookmakers']:
                 for market in bookmaker['markets']:
@@ -64,7 +61,8 @@ def get_all_odds():
                             if outcome['name'] == 'Over':
                                 lines.append(outcome['point'])
             if lines:
-                consensus = round(sum(lines) / len(lines), 1)
+                raw = sum(lines) / len(lines)
+                consensus = round(raw * 2) / 2
                 game_key = f"{away} @ {home}"
                 contracts[game_key] = {
                     "home": home,
@@ -116,8 +114,10 @@ def get_tomorrows_games():
                             if outcome['name'] == 'Over':
                                 lines.append(outcome['point'])
             if lines:
+                raw = sum(lines) / len(lines)
+                consensus = round(raw * 2) / 2
                 tomorrow_games[game_key] = {
-                    "threshold": round(sum(lines) / len(lines), 1),
+                    "threshold": consensus,
                     "game_time": game_time_et
                 }
         return tomorrow_games
@@ -129,6 +129,7 @@ def get_tomorrows_games():
 # SECTION 3: NBA API — FULL SCHEDULE & SCORES
 # Pulls ALL of today's games from nba_api.
 # Never misses a game regardless of when script is run.
+# Also checks yesterday for late games past midnight.
 # ============================================================
 def get_todays_games():
     try:
@@ -193,32 +194,38 @@ def get_nba_teams():
     except Exception:
         print("WARNING: Could not reach TheSportsDB API.")
         return {}
-def get_historical_scores(date_str):
-        try:
-            check_date = datetime.date.fromisoformat(date_str)
-            data = scoreboardv3.ScoreboardV3(game_date=check_date).get_dict()
-            scores = {}
-            for game in data['scoreboard']['games']:
-                status = game['gameStatusText'].strip()
-                home = game['homeTeam']
-                away = game['awayTeam']
-                home_name = f"{home['teamCity']} {home['teamName']}"
-                away_name = f"{away['teamCity']} {away['teamName']}"
-                game_key = f"{away_name} @ {home_name}"
-                if status.startswith("Final"):
-                    scores[game_key] = {
-                        "home_score": home['score'] or 0,
-                        "away_score": away['score'] or 0,
-                        "combined": (home['score'] or 0) + (away['score'] or 0),
-                        "status": status
-                    }
-            return scores
-        except Exception as e:
-            print(f"WARNING: Could not retrieve scores for {date_str}: {e}")
-            return {}
-            
+
 # ============================================================
-# SECTION 5: SETTLEMENT FUNCTION
+# SECTION 5: HISTORICAL SCORES
+# Pulls final scores for a specific past date.
+# Used to settle historical contracts in the database.
+# ============================================================
+def get_historical_scores(date_str):
+    try:
+        check_date = datetime.date.fromisoformat(date_str)
+        data = scoreboardv3.ScoreboardV3(game_date=check_date).get_dict()
+        scores = {}
+        for game in data['scoreboard']['games']:
+            status = game['gameStatusText'].strip()
+            home = game['homeTeam']
+            away = game['awayTeam']
+            home_name = f"{home['teamCity']} {home['teamName']}"
+            away_name = f"{away['teamCity']} {away['teamName']}"
+            game_key = f"{away_name} @ {home_name}"
+            if status.startswith("Final"):
+                scores[game_key] = {
+                    "home_score": home['score'] or 0,
+                    "away_score": away['score'] or 0,
+                    "combined": (home['score'] or 0) + (away['score'] or 0),
+                    "status": status
+                }
+        return scores
+    except Exception as e:
+        print(f"WARNING: Could not retrieve scores for {date_str}: {e}")
+        return {}
+
+# ============================================================
+# SECTION 6: SETTLEMENT FUNCTION
 # ============================================================
 def settle_contract(game_key, game_data, threshold, stadium, location, volume):
     timestamp = datetime.datetime.now(EASTERN)
@@ -265,7 +272,7 @@ def settle_contract(game_key, game_data, threshold, stadium, location, volume):
     return result, display_score
 
 # ============================================================
-# SECTION 6: MAIN SETTLEMENT LOOP
+# SECTION 7: MAIN SETTLEMENT LOOP
 # ============================================================
 start_time = datetime.datetime.now(EASTERN)
 
@@ -275,17 +282,12 @@ print(f"  Date: {start_time.strftime('%B %d, %Y')}")
 print(f"  Time: {start_time.strftime('%I:%M %p ET')}")
 print("=" * 55)
 
-# Initialize database
 init_db()
-
-# Pull today's full game schedule from nba_api
 todays_games = get_todays_games()
 
-# Check if we already have today's lines stored
 if has_todays_contracts():
     stored_contracts = load_todays_contracts()
     new_contracts = get_all_odds()
-    # Store any new games not already in database
     if new_contracts:
         newly_stored = store_contracts(new_contracts)
         if newly_stored > 0:
@@ -293,7 +295,6 @@ if has_todays_contracts():
     contracts = stored_contracts
     print(f"\n📋 Lines loaded from database")
 else:
-    # First run today — pull and store all lines
     new_contracts = get_all_odds()
     if new_contracts:
         store_contracts(new_contracts)
@@ -355,7 +356,6 @@ for game_key, game_data in todays_games.items():
             errors_list.append(entry)
 
     else:
-        # No line available — show score only
         status = game_data['status']
         if status.startswith("Final"):
             combined = game_data["combined"]
@@ -379,7 +379,7 @@ for game_key, game_data in todays_games.items():
         no_line_list.append(entry)
 
 # ============================================================
-# SECTION 7: CLEAN OUTPUT DISPLAY
+# SECTION 8: CLEAN OUTPUT DISPLAY
 # ============================================================
 if settled_list:
     print("\n" + "-" * 55)
@@ -427,7 +427,7 @@ if tomorrow_games:
         print(f"  {game_key:<38} | Line: {data['threshold']:<6} | Tipoff: {tipoff}")
 
 # ============================================================
-# SECTION 8: SUMMARY
+# SECTION 9: SUMMARY
 # ============================================================
 settled_vol = sum(e['volume'] for e in settled_list)
 in_progress_vol = sum(e['volume'] for e in in_progress_list)
@@ -457,8 +457,9 @@ if errors_list:
     print(f"\n  ⚠️  {len(errors_list)} contract(s) saved to manual_review.csv")
 else:
     print("\n  ✅ No manual review required!")
+
 # ============================================================
-# SECTION 9: HISTORICAL SETTLEMENTS
+# SECTION 10: HISTORICAL SETTLEMENTS
 # Shows last 3 days of settled contracts
 # ============================================================
 recent_contracts = load_recent_contracts(days=3)
@@ -491,5 +492,5 @@ if recent_contracts:
                 print(f"  ✅ {game_key:<38} | {display_score:<25} | Line: {threshold:<6} | {result}")
             else:
                 print(f"  ⏭️  {game_key:<38} | No final score available")
-                
+
 print("=" * 55)
